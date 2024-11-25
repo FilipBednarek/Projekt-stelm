@@ -1,0 +1,52 @@
+-- Tworzenie bazy danych
+CREATE DATABASE Biblioteka;
+USE Biblioteka;
+
+-- Tabela Czytelnicy
+CREATE TABLE Czytelnicy (
+    id_czytelnika INT AUTO_INCREMENT PRIMARY KEY,
+    imie VARCHAR(50) NOT NULL,
+    nazwisko VARCHAR(50) NOT NULL,
+    adres_email VARCHAR(100) UNIQUE NOT NULL
+);
+
+-- Tabela Wydawnictwa
+CREATE TABLE Wydawnictwa (
+    id_wydawnictwa INT AUTO_INCREMENT PRIMARY KEY,
+    nazwa_wydawnictwa VARCHAR(100) NOT NULL
+);
+
+-- Tabela Ksiazki
+CREATE TABLE Ksiazki (
+    id_ksiazki INT AUTO_INCREMENT PRIMARY KEY,
+    tytul VARCHAR(200) NOT NULL,
+    autor VARCHAR(100) NOT NULL,
+    id_wydawnictwa INT,
+    FOREIGN KEY (id_wydawnictwa) REFERENCES Wydawnictwa(id_wydawnictwa)
+);
+
+-- Tabela Wypozyczenia
+CREATE TABLE Wypozyczenia (
+    id_wypozyczenia INT AUTO_INCREMENT PRIMARY KEY,
+    id_czytelnika INT NOT NULL,
+    id_ksiazki INT NOT NULL,
+    data_wypozyczenia DATE NOT NULL,
+    data_zwrotu DATE,
+    FOREIGN KEY (id_czytelnika) REFERENCES Czytelnicy(id_czytelnika),
+    FOREIGN KEY (id_ksiazki) REFERENCES Ksiazki(id_ksiazki)
+);
+
+-- Tabela Kategorie
+CREATE TABLE Kategorie (
+    id_kategorii INT AUTO_INCREMENT PRIMARY KEY,
+    nazwa_kategorii VARCHAR(100) NOT NULL
+);
+
+-- Powiązanie Ksiazki z Kategoriami (relacja wiele-do-wielu)
+CREATE TABLE Ksiazki_Kategorie (
+    id_ksiazki INT NOT NULL,
+    id_kategorii INT NOT NULL,
+    PRIMARY KEY (id_ksiazki, id_kategorii),
+    FOREIGN KEY (id_ksiazki) REFERENCES Ksiazki(id_ksiazki),
+    FOREIGN KEY (id_kategorii) REFERENCES Kategorie(id_kategorii)
+);
